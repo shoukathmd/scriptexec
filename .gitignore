@@ -84,3 +84,6 @@ build/resources/main/application.properties
 build/tmp/jar/MANIFEST.MF
 hypervproxy.log
 .idea/uiDesigner.xml
+build/classes/main/com/hypergrid/hyperform/hypervproxy/config/WebSecurityConfig.class
+build/libs/HyperForm-HyperVProxy-1.0-SNAPSHOT-*.jar
+build/libs/HyperForm-HyperVProxy-1.0-SNAPSHOT-1470718588454.jar.original

@@ -16,9 +16,10 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
+
 jar {
-    baseName = 'hyper-v-proxy'
-    version = '1.0'
+    baseName = 'HyperForm-HyperVProxy'
+    version = '1.0-SNAPSHOT' + '-' + System.currentTimeMillis();
 }
 
 repositories {
