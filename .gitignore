@@ -87,3 +87,4 @@ hypervproxy.log
 build/classes/main/com/hypergrid/hyperform/hypervproxy/config/WebSecurityConfig.class
 build/libs/HyperForm-HyperVProxy-1.0-SNAPSHOT-*.jar
 build/libs/HyperForm-HyperVProxy-1.0-SNAPSHOT-1470718588454.jar.original
+build/**
