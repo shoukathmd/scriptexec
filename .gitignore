@@ -83,3 +83,4 @@ build/libs/hyper-v-proxy-1.0.jar.original
 build/resources/main/application.properties
 build/tmp/jar/MANIFEST.MF
 hypervproxy.log
+.idea/uiDesigner.xml

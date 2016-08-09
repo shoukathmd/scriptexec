@@ -1,4 +1,4 @@
-package com.hypergrid.hyperform.hypervproxy.main;
+package com.hypergrid.hyperform.hypervproxy.config;
 
 
 import org.apache.commons.lang3.RandomStringUtils;
