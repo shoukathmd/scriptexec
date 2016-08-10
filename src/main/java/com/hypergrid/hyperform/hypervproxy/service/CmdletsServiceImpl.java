@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -24,6 +27,31 @@ import java.util.UUID;
 public class CmdletsServiceImpl implements CmdletsService {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
+
+
+    @Override
+    public List<String> listFiles(String directory, String extension) {
+
+        List<String> response = new ArrayList<String>();
+        String[] extensions = null;
+        try {
+            if (!org.springframework.util.StringUtils.isEmpty(extension)) {
+                extensions = org.springframework.util.StringUtils.split(extension, ",");
+            }
+
+            Collection<File> files = FileUtils.listFiles(new File(directory), extensions, false);
+
+            for (File file : files) {
+                logger.info("Name [{}} absolute-path [{}] canonical-path [{}] parent [{}] path [{}]", file.getName(), file.getAbsolutePath(), file.getParent(), file.getPath());
+                response.add(file.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            logger.warn(e.getLocalizedMessage(), e);
+            response.add(e.getLocalizedMessage());
+        }
+        return response;
+    }
+
 
     @Override
     public String executeCommand(String interpreter, String command, String args, String ext, long timeout, int[] inputValidExitCodes) {

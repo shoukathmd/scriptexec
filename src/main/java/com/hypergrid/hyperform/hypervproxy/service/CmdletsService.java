@@ -1,7 +1,8 @@
 /* COPYRIGHT (C) 2016 HyperGrid. All Rights Reserved. */
 package com.hypergrid.hyperform.hypervproxy.service;
 
-import java.io.IOException;
+import java.io.File;
+import java.util.List;
 
 /**
  * Cmdlet Service - wrapper for running powershell.
@@ -22,4 +23,13 @@ public interface CmdletsService {
      * @return cmdlet response
      */
     public String executeCommand(String interpreter, String command, String args, String ext, long timeout, int[] inputValidExitCodes);
+
+    /**
+     * Lists VHDx file
+     *
+     * @param directory
+     * @param extension
+     * @return
+     */
+    public List<String> listFiles(String directory, String extension);
 }
