@@ -60,11 +60,11 @@ public class CmdletsServiceImpl implements CmdletsService {
         try {
             String fileName = "hypervproxy-" + UUID.randomUUID().toString() + "." + ext;
             scriptFile = /*dchqDir + File.separator +*/ fileName;
-
+            logger.info("Executing cmdlet [{}]", command);
             FileUtils.writeStringToFile(new File(scriptFile), command, Charsets.UTF_8);
             logger.debug("Created script file [{}]", fileName);
 
-            String execCmd = interpreter + " " + scriptFile + " " + args;
+            String execCmd = interpreter + " -file " + scriptFile + " " + args;
 
             response = executeCommand(execCmd, timeout, inputValidExitCodes);
             logger.debug("Cmdlet response [{}]", response);

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -36,7 +37,12 @@ public class CmdletsController {
                                @RequestParam(value = "ext", defaultValue = "ps1") String ext,
                                @RequestParam(value = "timeout", defaultValue = "1200000") String timeout) {
 
-        logger.info("Cmdlet received...");
+        try {
+            cmdlet = java.net.URLDecoder.decode(cmdlet, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            logger.warn(e.getLocalizedMessage(), e);
+        }
+        logger.info("Cmdlet [{}] received...", cmdlet);
         logger.debug("Run... interpreter [{}] cmdlet [{}] parameters [{}] ext [{}] timeout [{}] ", interpreter, cmdlet, parameters, ext, timeout);
         String response = cmdletsService.executeCommand(interpreter, cmdlet, parameters, ext, Long.parseLong(timeout), null);
 
@@ -46,7 +52,7 @@ public class CmdletsController {
     @RequestMapping(value = "/list-images", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<List<String>> listImages(@RequestParam(value = "directory", defaultValue = "/tmp/images") String directory,
+    ResponseEntity<List<String>> listImages(@RequestParam(value = "directory", defaultValue = "C://templates/") String directory,
                                             @RequestParam(value = "extension", defaultValue = "vhdx,vhd") String extension) {
 
         logger.info("List-Images directory [{}] extension [{}] ", directory, extension);
