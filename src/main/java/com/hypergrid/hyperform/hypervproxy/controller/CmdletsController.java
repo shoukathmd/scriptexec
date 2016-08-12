@@ -5,6 +5,7 @@ import com.hypergrid.hyperform.hypervproxy.service.CmdletsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -25,17 +26,55 @@ public class CmdletsController {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Value("${templates.dir}")
+    protected String templatesDir;
+
+    @Value("${templates.ext}")
+    protected String templatesExt;
+
+
+    @Value("${cmdlet.max.timeout}")
+    protected String defaultTimeout;
+
+
+    @Value("${cmdlet.interpreter}")
+    protected String defaultInterpreter;
+
+
+    @Value("${cmdlet.script.ext}")
+    protected String defaultScriptExt;
+
+
+    @Value("${cmdlet.default}")
+    protected String defaultCmdlet;
+
     @Autowired
     protected CmdletsService cmdletsService;
 
     @RequestMapping(value = "/run", method = RequestMethod.POST)
     public
     @ResponseBody
-    ResponseEntity<String> run(@RequestParam(value = "interpreter", defaultValue = "powershell") String interpreter,
-                               @RequestParam(value = "cmdlet", defaultValue = "Test-Connection \"127.0.0.1\"") String cmdlet,
+    ResponseEntity<String> run(@RequestParam(value = "interpreter", defaultValue = "") String interpreter,
+                               @RequestParam(value = "cmdlet", defaultValue = "") String cmdlet,
                                @RequestParam(value = "parameters", defaultValue = "") String parameters,
-                               @RequestParam(value = "ext", defaultValue = "ps1") String ext,
-                               @RequestParam(value = "timeout", defaultValue = "1200000") String timeout) {
+                               @RequestParam(value = "ext", defaultValue = "") String ext,
+                               @RequestParam(value = "timeout", defaultValue = "") String timeout) {
+
+        if (StringUtils.isEmpty(interpreter)) {
+            interpreter = defaultInterpreter;
+        }
+
+        if (StringUtils.isEmpty(cmdlet)) {
+            cmdlet = defaultCmdlet;
+        }
+
+        if (StringUtils.isEmpty(ext)) {
+            ext = defaultScriptExt;
+        }
+
+        if (StringUtils.isEmpty(timeout)) {
+            timeout = defaultTimeout;
+        }
 
         try {
             cmdlet = java.net.URLDecoder.decode(cmdlet, "UTF-8");
@@ -52,8 +91,16 @@ public class CmdletsController {
     @RequestMapping(value = "/list-images", method = RequestMethod.GET)
     public
     @ResponseBody
-    ResponseEntity<List<String>> listImages(@RequestParam(value = "directory", defaultValue = "C://templates/") String directory,
-                                            @RequestParam(value = "extension", defaultValue = "vhdx,vhd") String extension) {
+    ResponseEntity<List<String>> listImages(@RequestParam(value = "directory", defaultValue = "") String directory,
+                                            @RequestParam(value = "extension", defaultValue = "") String extension) {
+
+        if (StringUtils.isEmpty(directory)) {
+            directory = templatesDir;
+        }
+
+        if (StringUtils.isEmpty(extension)) {
+            extension = templatesExt;
+        }
 
         logger.info("List-Images directory [{}] extension [{}] ", directory, extension);
 

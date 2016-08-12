@@ -1,3 +1,4 @@
+/* COPYRIGHT (C) 2016 HyperGrid. All Rights Reserved. */
 package com.hypergrid.hyperform.hypervproxy.config;
 
 
@@ -15,6 +16,10 @@ import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
+/**
+ * @author Intesar Mohammed
+ */
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -27,6 +32,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${hypervproxy.username}")
     protected String username;
 
+
+    @Value("${hypervproxy.password.generate}")
+    protected String generatePassword;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
@@ -37,7 +46,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
-        if (StringUtils.isEmpty(password)) {
+        if (StringUtils.isEmpty(password)
+                || org.apache.commons.lang3.StringUtils.equalsIgnoreCase("yes", generatePassword)
+                || org.apache.commons.lang3.StringUtils.equalsIgnoreCase("true", generatePassword)) {
+            logger.info("Generating new password on start...");
             this.password = RandomStringUtils.randomAlphanumeric(12);
         }
 
