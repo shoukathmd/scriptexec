@@ -2,6 +2,7 @@
 package com.hypergrid.hyperform.hypervproxy.config;
 
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 || org.apache.commons.lang3.StringUtils.equalsIgnoreCase("true", generatePassword)) {
             logger.info("Generating new password on start...");
             this.password = RandomStringUtils.randomAlphanumeric(12);
+            logger.info("Generated new password [{}]", this.password);
+            this.password = DigestUtils.sha256Hex(this.password);
         }
 
         logger.info("*****************************************************************");
