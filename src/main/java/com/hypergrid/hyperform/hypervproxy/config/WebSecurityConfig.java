@@ -49,16 +49,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
+        logger.info("*****************************************************************");
         if (StringUtils.isEmpty(password)
                 || org.apache.commons.lang3.StringUtils.equalsIgnoreCase("yes", generatePassword)
                 || org.apache.commons.lang3.StringUtils.equalsIgnoreCase("true", generatePassword)) {
-            logger.info("Generating new password on start...");
+            //logger.info("Generating new password on start...");
             this.password = RandomStringUtils.randomAlphanumeric(12);
             logger.info("Generated new password [{}]", this.password);
             this.password = DigestUtils.sha256Hex(this.password);
         }
 
-        logger.info("*****************************************************************");
+
         logger.info("API Credentials: username [{}] password [{}]", username, password);
         logger.info("*****************************************************************");
 
