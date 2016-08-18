@@ -8,10 +8,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,6 +30,33 @@ public class CmdletsServiceImpl implements CmdletsService {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Value("${templates.dir}")
+    protected String templatesDir;
+
+    @Value("${templates.ext}")
+    protected String templatesExt;
+
+
+    @Value("${cmdlet.max.timeout}")
+    protected String defaultTimeout;
+
+
+    @Value("${cmdlet.interpreter}")
+    protected String defaultInterpreter;
+
+
+    @Value("${cmdlet.script.ext}")
+    protected String defaultScriptExt;
+
+
+    @Value("${cmdlet.default}")
+    protected String defaultCmdlet;
+
+    @Value("${vhdx.destination}")
+    protected String vhdxDestination;
+
+    protected static final String VHDX_BASE_LOC_PATTERN = "$VHDX_BASE_LOC";
+
 
     @Override
     public List<String> listFiles(String directory, String extension) {
@@ -35,6 +64,14 @@ public class CmdletsServiceImpl implements CmdletsService {
         List<String> response = new ArrayList<String>();
         String[] extensions = null;
         try {
+            if (org.springframework.util.StringUtils.isEmpty(directory)) {
+                directory = templatesDir;
+            }
+
+            if (org.springframework.util.StringUtils.isEmpty(extension)) {
+                extension = templatesExt;
+            }
+
             if (!org.springframework.util.StringUtils.isEmpty(extension)) {
                 extensions = org.springframework.util.StringUtils.split(extension, ",");
             }
@@ -54,10 +91,40 @@ public class CmdletsServiceImpl implements CmdletsService {
 
 
     @Override
-    public String executeCommand(String interpreter, String command, String args, String ext, long timeout, int[] inputValidExitCodes) {
+    public String executeCommand(String interpreter, String command, String args, String ext, String timeout, int[] inputValidExitCodes) {
         String scriptFile = null;
         String response = null;
+        Long timeoutMilli = null;
         try {
+
+            if (org.springframework.util.StringUtils.isEmpty(interpreter)) {
+                interpreter = defaultInterpreter;
+            }
+
+            if (org.springframework.util.StringUtils.isEmpty(command)) {
+                command = defaultCmdlet;
+            }
+
+            if (StringUtils.contains(command, VHDX_BASE_LOC_PATTERN)) {
+                command = StringUtils.replace(command, VHDX_BASE_LOC_PATTERN, vhdxDestination);
+            }
+
+            if (org.springframework.util.StringUtils.isEmpty(ext)) {
+                ext = defaultScriptExt;
+            }
+
+            if (org.springframework.util.StringUtils.isEmpty(timeout)) {
+                timeout = defaultTimeout;
+            }
+            timeoutMilli = Long.parseLong(timeout);
+
+
+            try {
+                command = java.net.URLDecoder.decode(command, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                logger.warn(e.getLocalizedMessage(), e);
+            }
+
             String fileName = "hypervproxy-" + UUID.randomUUID().toString() + "." + ext;
             scriptFile = /*dchqDir + File.separator +*/ fileName;
             logger.info("Executing cmdlet [{}]", command);
@@ -66,7 +133,7 @@ public class CmdletsServiceImpl implements CmdletsService {
 
             String execCmd = interpreter + " -file " + scriptFile + " " + args;
 
-            response = executeCommand(execCmd, timeout, inputValidExitCodes);
+            response = executeCommand(execCmd, timeoutMilli, inputValidExitCodes);
             logger.debug("Cmdlet response [{}]", response);
 
         } catch (Exception ex) {

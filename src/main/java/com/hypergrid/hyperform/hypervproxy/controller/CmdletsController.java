@@ -26,27 +26,6 @@ public class CmdletsController {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Value("${templates.dir}")
-    protected String templatesDir;
-
-    @Value("${templates.ext}")
-    protected String templatesExt;
-
-
-    @Value("${cmdlet.max.timeout}")
-    protected String defaultTimeout;
-
-
-    @Value("${cmdlet.interpreter}")
-    protected String defaultInterpreter;
-
-
-    @Value("${cmdlet.script.ext}")
-    protected String defaultScriptExt;
-
-
-    @Value("${cmdlet.default}")
-    protected String defaultCmdlet;
 
     @Autowired
     protected CmdletsService cmdletsService;
@@ -60,30 +39,10 @@ public class CmdletsController {
                                @RequestParam(value = "ext", defaultValue = "") String ext,
                                @RequestParam(value = "timeout", defaultValue = "") String timeout) {
 
-        if (StringUtils.isEmpty(interpreter)) {
-            interpreter = defaultInterpreter;
-        }
 
-        if (StringUtils.isEmpty(cmdlet)) {
-            cmdlet = defaultCmdlet;
-        }
-
-        if (StringUtils.isEmpty(ext)) {
-            ext = defaultScriptExt;
-        }
-
-        if (StringUtils.isEmpty(timeout)) {
-            timeout = defaultTimeout;
-        }
-
-        try {
-            cmdlet = java.net.URLDecoder.decode(cmdlet, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            logger.warn(e.getLocalizedMessage(), e);
-        }
         logger.info("Cmdlet [{}] received...", cmdlet);
         logger.debug("Run... interpreter [{}] cmdlet [{}] parameters [{}] ext [{}] timeout [{}] ", interpreter, cmdlet, parameters, ext, timeout);
-        String response = cmdletsService.executeCommand(interpreter, cmdlet, parameters, ext, Long.parseLong(timeout), null);
+        String response = cmdletsService.executeCommand(interpreter, cmdlet, parameters, ext, timeout, null);
 
         return new ResponseEntity<String>(response, HttpStatus.OK);
     }
@@ -94,13 +53,6 @@ public class CmdletsController {
     ResponseEntity<List<String>> listImages(@RequestParam(value = "directory", defaultValue = "") String directory,
                                             @RequestParam(value = "extension", defaultValue = "") String extension) {
 
-        if (StringUtils.isEmpty(directory)) {
-            directory = templatesDir;
-        }
-
-        if (StringUtils.isEmpty(extension)) {
-            extension = templatesExt;
-        }
 
         logger.info("List-Images directory [{}] extension [{}] ", directory, extension);
 
