@@ -24,7 +24,6 @@ import java.util.UUID;
 
 @Configuration
 @EnableWebSecurity
-@PropertySource(name = "spring.config.location", value = "file:///c:/opt/dchq/config/application.properties", ignoreResourceNotFound = false)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
