@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -23,6 +24,7 @@ import java.util.UUID;
 
 @Configuration
 @EnableWebSecurity
+@PropertySource(name = "spring.config.location", value = "file:///c:/opt/dchq/config/application.properties", ignoreResourceNotFound = false)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
