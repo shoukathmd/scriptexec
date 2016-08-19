@@ -105,10 +105,6 @@ public class CmdletsServiceImpl implements CmdletsService {
                 command = defaultCmdlet;
             }
 
-            if (StringUtils.contains(command, VHDX_BASE_LOC_PATTERN)) {
-                command = StringUtils.replace(command, VHDX_BASE_LOC_PATTERN, vhdxDestination);
-            }
-
             if (org.springframework.util.StringUtils.isEmpty(ext)) {
                 ext = defaultScriptExt;
             }
