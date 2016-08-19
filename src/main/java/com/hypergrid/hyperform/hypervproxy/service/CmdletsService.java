@@ -23,13 +23,4 @@ public interface CmdletsService {
      * @return cmdlet response
      */
     public String executeCommand(String interpreter, String command, String args, String ext, String timeout, int[] inputValidExitCodes);
-
-    /**
-     * Lists VHDx file
-     *
-     * @param directory
-     * @param extension
-     * @return
-     */
-    public List<String> listFiles(String directory, String extension);
 }

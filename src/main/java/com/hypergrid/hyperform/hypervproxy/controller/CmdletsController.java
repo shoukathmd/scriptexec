@@ -47,18 +47,4 @@ public class CmdletsController {
         return new ResponseEntity<String>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/list-images", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    ResponseEntity<List<String>> listImages(@RequestParam(value = "directory", defaultValue = "") String directory,
-                                            @RequestParam(value = "extension", defaultValue = "") String extension) {
-
-
-        logger.info("List-Images directory [{}] extension [{}] ", directory, extension);
-
-        List<String> response = cmdletsService.listFiles(directory, extension);
-
-        return new ResponseEntity<List<String>>(response, HttpStatus.OK);
-    }
-
 }

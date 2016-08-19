@@ -30,13 +30,6 @@ public class CmdletsServiceImpl implements CmdletsService {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Value("${templates.dir}")
-    protected String templatesDir;
-
-    @Value("${templates.ext}")
-    protected String templatesExt;
-
-
     @Value("${cmdlet.max.timeout}")
     protected String defaultTimeout;
 
@@ -51,43 +44,6 @@ public class CmdletsServiceImpl implements CmdletsService {
 
     @Value("${cmdlet.default}")
     protected String defaultCmdlet;
-
-    @Value("${vhdx.destination}")
-    protected String vhdxDestination;
-
-    protected static final String VHDX_BASE_LOC_PATTERN = "$VHDX_BASE_LOC";
-
-
-    @Override
-    public List<String> listFiles(String directory, String extension) {
-
-        List<String> response = new ArrayList<String>();
-        String[] extensions = null;
-        try {
-            if (org.springframework.util.StringUtils.isEmpty(directory)) {
-                directory = templatesDir;
-            }
-
-            if (org.springframework.util.StringUtils.isEmpty(extension)) {
-                extension = templatesExt;
-            }
-
-            if (!org.springframework.util.StringUtils.isEmpty(extension)) {
-                extensions = org.springframework.util.StringUtils.split(extension, ",");
-            }
-
-            Collection<File> files = FileUtils.listFiles(new File(directory), extensions, false);
-
-            for (File file : files) {
-                logger.info("Name [{}} absolute-path [{}] canonical-path [{}] parent [{}] path [{}]", file.getName(), file.getAbsolutePath(), file.getParent(), file.getPath());
-                response.add(file.getAbsolutePath());
-            }
-        } catch (Exception e) {
-            logger.warn(e.getLocalizedMessage(), e);
-            response.add(e.getLocalizedMessage());
-        }
-        return response;
-    }
 
 
     @Override
