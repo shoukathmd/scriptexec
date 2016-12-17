@@ -59,11 +59,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         }
 
 
-        logger.info("API Credentials: username [{}] password [{}]", username, password);
+        logger.info("API Credentials: username [{}] password [{}]", this.username, this.password);
         logger.info("*****************************************************************");
 
         auth
                 .inMemoryAuthentication()
-                .withUser(username).password(this.password).roles("USER");
+                .withUser(this.username).password(this.password).roles("USER");
     }
 }

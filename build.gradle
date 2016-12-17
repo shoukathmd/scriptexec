@@ -1,13 +1,13 @@
 buildscript {
     repositories {
-        maven { url "http://repo.spring.io/libs-release" }
-        maven { url "https://oss.sonatype.org/" }
-        maven { url "https://oss.sonatype.org/content/groups/public" }
-        mavenLocal()
+        // maven { url "http://repo.spring.io/libs-release" }
+        // maven { url "https://oss.sonatype.org/" }
+        // maven { url "https://oss.sonatype.org/content/groups/public" }
+        // mavenLocal()
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
     }
 }
 
@@ -21,6 +21,13 @@ jar {
     baseName = 'HyperForm-HyperVProxy'
     version = '1.0-SNAPSHOT' + '-' + System.currentTimeMillis();
 }
+
+task latestJar(type: Jar) {
+    baseName = 'HyperForm-HyperVProxy' + '-latest'
+}
+
+jar.dependsOn(latestJar)
+
 
 repositories {
     mavenCentral()
