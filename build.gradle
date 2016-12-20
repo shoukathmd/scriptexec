@@ -28,6 +28,12 @@ task latestJar(type: Jar) {
 
 jar.dependsOn(latestJar)
 
+tasks.withType(Jar) { task ->
+    task.doLast {
+        ant.checksum file: it.archivePath
+    }
+}
+
 
 repositories {
     mavenCentral()
