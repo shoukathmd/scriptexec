@@ -9,14 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.util.StringUtils;
-
-import java.util.UUID;
 
 /**
  * @author Intesar Mohammed
@@ -34,9 +31,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${hypervproxy.username}")
     protected String username;
 
-
     @Value("${hypervproxy.password.generate}")
     protected String generatePassword;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -53,9 +50,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 || org.apache.commons.lang3.StringUtils.equalsIgnoreCase("yes", generatePassword)
                 || org.apache.commons.lang3.StringUtils.equalsIgnoreCase("true", generatePassword)) {
             //logger.info("Generating new password on start...");
-            this.password = RandomStringUtils.randomAlphanumeric(12);
+            this.password = RandomStringUtils.randomAlphanumeric(64);
             logger.info("Generated new password [{}]", this.password);
             this.password = DigestUtils.sha256Hex(this.password);
+
+            logger.info("Persisting password hash [{}]", this.password);
+            ConfigFileUtil.writeConfigFile(this.password);
         }
 
 
