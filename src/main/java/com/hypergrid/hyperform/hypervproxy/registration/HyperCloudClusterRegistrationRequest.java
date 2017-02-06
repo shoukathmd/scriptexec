@@ -18,5 +18,12 @@ public class HyperCloudClusterRegistrationRequest implements Serializable {
     public void setMap(Map<String, String> map) {
         this.map = map;
     }
+
+    @Override
+    public String toString() {
+        return "HyperCloudClusterRegistrationRequest{" +
+                "map=" + map +
+                '}';
+    }
 }
 

@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Properties;
 
 /**
@@ -35,10 +36,30 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
 
     protected RegistrationSender registrationSender;
 
+    protected String csvPath;
+    protected String csvComputeServicePath;
+    protected String csvBlockServicePath;
+
+    private final String PROXY_URL = "proxy.url";
+    private final String PROXY_USERNAME = "proxy.username";
+    private final String PROXY_PASSWORD = "proxy.password";
+    private final String CLUSTER_NAME = "cluster.name";
+    private final String NODE_NAME = "node.name";
+    private final String VM_TEMPLATE_LOC = "vm.template.loc";
+    private final String VM_VHDX_LOC = "vm.vhdx.loc";
+    private final String WARNINGS = "warnings";
+    private final String CSV_PATH = "vm.template.loc";
+    private final String CSV_COMPUTE_SERVICE_PATH = "vm.vhdx.loc";
+    private final String CSV_BLOCK_SERVICE_PATH = "bs.vhdx.loc";
+
+
     @Autowired
     public RegistrationUtil(@Value("${server.port}") String port,
                             @Value("${registration.max.retry}") Integer maxRetries,
                             @Value("${mock.service}") Boolean mockService,
+                            @Value("${csv.path}") String csvPath,
+                            @Value("${csv.compute-service.path}") String csvComputeServicePath,
+                            @Value("${csv.block-service.path}") String csvBlockServicePath,
                             CmdletsService cmdletsService,
                             @Qualifier("NodeRepositoryImpl") NodeRepository nodeRepository,
                             @Qualifier("MockNodeRepository") NodeRepository mockRepository,
@@ -48,6 +69,10 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
         this.maxRetries = maxRetries;
         this.cmdletsService = cmdletsService;
         this.registrationSender = registrationSender;
+
+        this.csvPath = csvPath;
+        this.csvComputeServicePath = csvComputeServicePath;
+        this.csvBlockServicePath = csvBlockServicePath;
 
         repository = nodeRepository;
         if (BooleanUtils.isTrue(mockService)) {
@@ -98,43 +123,56 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
         try {
             StringBuilder sb = new StringBuilder();
 
+            HyperCloudClusterRegistrationRequest dto = new HyperCloudClusterRegistrationRequest();
+            dto.setMap(new HashMap<>());
+
             String ip = repository.getHostIp();
             if (org.apache.commons.lang3.StringUtils.isEmpty(ip)) {
                 sb.append("Can't find host 'IP'.");
             }
 
-            String url = "https://" + ip + ":" + port;
+            String proxyUrl = "https://" + ip + ":" + port;
+            dto.getMap().put(PROXY_URL, proxyUrl);
 
-            String password = null;
+            String proxyPassword = null;
             Properties properties = ConfigFileUtil.readConfigFile();
             if (properties != null) {
-                password = properties.getProperty(ConfigFileUtil.PROP_PASS);
+                proxyPassword = properties.getProperty(ConfigFileUtil.PROP_PASS);
             } else {
                 sb.append("\n").append("File '" + ConfigFileUtil.CONFIG + "' not found.");
             }
-            if (org.apache.commons.lang3.StringUtils.isEmpty(password)) {
+            if (org.apache.commons.lang3.StringUtils.isEmpty(proxyPassword)) {
                 sb.append("\n")
                         .append("proxy 'password' not found.");
             }
+            dto.getMap().put(PROXY_PASSWORD, proxyPassword);
 
-            String cluster = repository.getClusterName();
-            if (org.apache.commons.lang3.StringUtils.isEmpty(cluster)) {
+            String clusterName = repository.getClusterName();
+            if (org.apache.commons.lang3.StringUtils.isEmpty(clusterName)) {
                 sb.append("\n")
                         .append("'cluster' name not found.");
             }
+            dto.getMap().put(CLUSTER_NAME, clusterName);
 
-            String node = repository.getNodeName();
-            if (org.apache.commons.lang3.StringUtils.isEmpty(node)) {
+            String nodeName = repository.getNodeName();
+            if (org.apache.commons.lang3.StringUtils.isEmpty(nodeName)) {
                 sb.append("\n")
                         .append("'node' name not found.");
             }
+            dto.getMap().put(NODE_NAME, nodeName);
+
+
             String csv = repository.getCSVPath();
             if (org.apache.commons.lang3.StringUtils.equalsIgnoreCase(csv, "true")) {
+                dto.getMap().put(CSV_PATH, this.csvPath);
                 // create compute service path
                 String vmResponse = repository.createVMPath();
+                dto.getMap().put(CSV_COMPUTE_SERVICE_PATH, this.csvComputeServicePath);
+
                 //sb.append("\n").append(vmResponse);
                 // create block storage service path
                 String bsResponse = repository.createBSPath();
+                dto.getMap().put(CSV_BLOCK_SERVICE_PATH, this.csvBlockServicePath);
                 //sb.append("\n").append(bsResponse);
             } else {
                 sb.append("\n")
@@ -142,10 +180,11 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
             }
 
             String warnings = sb.toString();
-            logger.info("Sending url [{}] password [{}] cluster [{}] node [{}] csv [{}] warnings [{}]", url, password, cluster, node, csv, warnings);
+            dto.getMap().put(WARNINGS, warnings);
+            logger.info("Sending dto [{}]", dto);
 
             // TODO - retry on failure
-            String response = registrationSender.sendAndReceiveProxy(repository.getHyperCloudUrl(), url, password, cluster, node, warnings);
+            String response = registrationSender.sendAndReceiveProxy(repository.getHyperCloudUrl(), dto);
 
             if (StringUtils.equals(response, "Error")) {
                 return false;

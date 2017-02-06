@@ -23,7 +23,6 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.HashMap;
 
 /**
  * @author Intesar Mohammed
@@ -37,20 +36,12 @@ public class RegistrationSender {
     private ParameterizedTypeReference<String> singleTypeReference = new ParameterizedTypeReference<String>() {
     };
 
-    private final String PROXY_URL = "proxy.url";
-    private final String PROXY_USERNAME = "proxy.username";
-    private final String PROXY_PASSWORD = "proxy.password";
-    private final String CLUSTER_NAME = "cluster.name";
-    private final String NODE_NAME = "node.name";
-    private final String VM_TEMPLATE_LOC = "vm.template.loc";
-    private final String VM_VHDX_LOC = "vm.vhdx.loc";
-    private final String WARNINGS = "warnings";
 
     public RegistrationSender() {
         template = new RestTemplate(useApacheHttpClientWithSelfSignedSupport());
     }
 
-    public String sendAndReceiveProxy(String endpoint, String proxyUrl, String proxyPassword, String clusterName, String nodeName, String warnings) {
+    public String sendAndReceiveProxy(String endpoint, HyperCloudClusterRegistrationRequest dto) {
 
         //logger.debug("Executing: [{}]", map);
 
@@ -73,14 +64,6 @@ public class RegistrationSender {
         org.springframework.web.util.UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(url).queryParams(params).build();
 
         //RequestEntity request = getBasicRequestEntity(null, uriComponents.toUri());
-        HyperCloudClusterRegistrationRequest dto = new HyperCloudClusterRegistrationRequest();
-        dto.setMap(new HashMap<>());
-
-        dto.getMap().put(PROXY_URL, proxyUrl);
-        dto.getMap().put(PROXY_PASSWORD, proxyPassword);
-        dto.getMap().put(CLUSTER_NAME, clusterName);
-        dto.getMap().put(NODE_NAME, nodeName);
-        dto.getMap().put(WARNINGS, warnings);
 
         HttpEntity<HyperCloudClusterRegistrationRequest> entity = new HttpEntity(dto, params);
 

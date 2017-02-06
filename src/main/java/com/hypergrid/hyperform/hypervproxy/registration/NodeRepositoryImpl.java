@@ -32,13 +32,13 @@ public class NodeRepositoryImpl implements NodeRepository {
     protected CmdletsService cmdletsService;
 
     @Value("${csv.path}")
-    public String CSV;// = "C:\\ClusterStorage\\Volume1";
+    protected String CSV;
 
     @Value("${csv.compute-service.path}")
-    public String CSV_VM_PATH;// = "C:\\ClusterStorage\\Volume1\\HyperCloud\\Compute-Service\\";
+    protected String CSV_VM_PATH;
 
     @Value("${csv.block-service.path}")
-    public String CSV_BS_PATH;// = "C:\\ClusterStorage\\Volume1\\HyperCloud\\Block-Service\\";
+    protected String CSV_BS_PATH;
 
 
     @Override
