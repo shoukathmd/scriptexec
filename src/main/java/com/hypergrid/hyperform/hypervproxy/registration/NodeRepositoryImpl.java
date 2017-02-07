@@ -40,11 +40,13 @@ public class NodeRepositoryImpl implements NodeRepository {
     @Value("${csv.block-service.path}")
     protected String CSV_BS_PATH;
 
+    @Value("${registration.url}")
+    protected String registrationUrl;
+
 
     @Override
     public String getHyperCloudUrl() {
-        String endpoint = "https://hypercloud.local/api/1.0/hypercloud-cluster-registration";
-        return endpoint;
+        return registrationUrl;
     }
 
     @Override
