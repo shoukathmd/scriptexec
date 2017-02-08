@@ -1,9 +1,6 @@
 /* COPYRIGHT (C) 2016 HyperGrid. All Rights Reserved. */
 package com.hypergrid.hyperform.hypervproxy.service;
 
-import java.io.File;
-import java.util.List;
-
 /**
  * Cmdlet Service - wrapper for running powershell.
  *
@@ -23,4 +20,13 @@ public interface CmdletsService {
      * @return cmdlet response
      */
     public String executeCommand(String interpreter, String command, String args, String ext, String timeout, int[] inputValidExitCodes);
+
+
+    /**
+     * Executes powershell cmdlet
+     *
+     * @param command - powershell cmdlet
+     * @return cmdlet response
+     */
+    public String executeCommand(String command);
 }

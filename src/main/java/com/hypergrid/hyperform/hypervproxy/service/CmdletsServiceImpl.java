@@ -14,9 +14,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -45,6 +42,11 @@ public class CmdletsServiceImpl implements CmdletsService {
     @Value("${cmdlet.default}")
     protected String defaultCmdlet;
 
+
+    @Override
+    public String executeCommand(String command) {
+        return executeCommand(StringUtils.EMPTY, command, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, null);
+    }
 
     @Override
     public String executeCommand(String interpreter, String command, String args, String ext, String timeout, int[] inputValidExitCodes) {

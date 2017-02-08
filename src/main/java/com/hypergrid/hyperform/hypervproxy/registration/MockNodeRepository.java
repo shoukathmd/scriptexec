@@ -52,4 +52,9 @@ public class MockNodeRepository implements NodeRepository {
     public String createBSPath() {
         return "";
     }
+
+    @Override
+    public String createTemplatesPath() {
+        return "";
+    }
 }

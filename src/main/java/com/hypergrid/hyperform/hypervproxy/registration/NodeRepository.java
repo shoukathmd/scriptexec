@@ -18,4 +18,6 @@ public interface NodeRepository {
     String createVMPath();
 
     String createBSPath();
+
+    String createTemplatesPath();
 }

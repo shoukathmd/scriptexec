@@ -40,6 +40,9 @@ public class NodeRepositoryImpl implements NodeRepository {
     @Value("${csv.block-service.path}")
     protected String CSV_BS_PATH;
 
+    @Value("${csv.templates.path}")
+    protected String CSV_TEMPLATES_PATH;
+
     @Value("${registration.url}")
     protected String registrationUrl;
 
@@ -100,7 +103,7 @@ public class NodeRepositoryImpl implements NodeRepository {
     public String getCSVPath() {
         try {
             String cmdlet = "Test-Path " + CSV;
-            String response = cmdletsService.executeCommand("", cmdlet, "", "", "", null);
+            String response = cmdletsService.executeCommand(cmdlet);
             logger.info("cmdlet [{}] response [{}]", cmdlet, response);
             return response;
         } catch (Exception e) {
@@ -115,12 +118,25 @@ public class NodeRepositoryImpl implements NodeRepository {
     }
 
     @Override
+    public String createTemplatesPath() {
+        return createPath(CSV_TEMPLATES_PATH);
+    }
+
+    @Override
     public String createBSPath() {
         return createPath(CSV_BS_PATH);
     }
 
-    public String createPath(String path) {
+    private String createPath(String path) {
         try {
+            String testPath = "Test-Path " + path;
+            String isPathPresent = cmdletsService.executeCommand(testPath);
+
+            if (org.apache.commons.lang3.StringUtils.equalsIgnoreCase("true", isPathPresent)) {
+                logger.info("Path [{}] exists", path);
+                return "true";
+            }
+
             String cmdlet = "New-Item " + path + " -type directory";
             String response = cmdletsService.executeCommand("", cmdlet, "", "", "", null);
             logger.info("cmdlet [{}] response [{}]", cmdlet, response);
@@ -131,7 +147,7 @@ public class NodeRepositoryImpl implements NodeRepository {
         return null;
     }
 
-    public Set<String> extractNames(String rawText) {
+    private Set<String> extractNames(String rawText) {
         Set<String> names = new HashSet<>();
 
         try {
