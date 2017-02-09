@@ -38,6 +38,7 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
 
     protected String csvPath;
     protected String csvComputeServicePath;
+    protected String csvComputeServiceTemplatesPath;
     protected String csvBlockServicePath;
 
     private final String PROXY_URL = "proxy.url";
@@ -45,11 +46,11 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
     private final String PROXY_PASSWORD = "proxy.password";
     private final String CLUSTER_NAME = "cluster.name";
     private final String NODE_NAME = "node.name";
-    private final String VM_TEMPLATE_LOC = "vm.template.loc";
     private final String VM_VHDX_LOC = "vm.vhdx.loc";
     private final String WARNINGS = "warnings";
     private final String CSV_PATH = "vm.template.loc";
     private final String CSV_COMPUTE_SERVICE_PATH = "vm.vhdx.loc";
+    private final String CSV_COMPUTE_SERVICE_TEMPLATES_PATH = "vm.template.loc";
     private final String CSV_BLOCK_SERVICE_PATH = "bs.vhdx.loc";
 
 
@@ -59,6 +60,7 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
                             @Value("${mock.service}") Boolean mockService,
                             @Value("${csv.path}") String csvPath,
                             @Value("${csv.compute-service.path}") String csvComputeServicePath,
+                            @Value("${csv.templates.path}") String csvComputeServiceTemplatesPath,
                             @Value("${csv.block-service.path}") String csvBlockServicePath,
                             CmdletsService cmdletsService,
                             @Qualifier("NodeRepositoryImpl") NodeRepository nodeRepository,
@@ -72,6 +74,7 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
 
         this.csvPath = csvPath;
         this.csvComputeServicePath = csvComputeServicePath;
+        this.csvComputeServiceTemplatesPath = csvComputeServiceTemplatesPath;
         this.csvBlockServicePath = csvBlockServicePath;
 
         repository = nodeRepository;
@@ -167,11 +170,18 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
                 dto.getMap().put(CSV_PATH, this.csvPath);
                 // create compute service path
                 String vmResponse = repository.createVMPath();
+                logger.info("Compute-Service path creation response [{}]", vmResponse);
                 dto.getMap().put(CSV_COMPUTE_SERVICE_PATH, this.csvComputeServicePath);
+
+                // create templates path
+                String templatesResponse = repository.createTemplatesPath();
+                logger.info("Compute-Service Templates path creation response [{}]", templatesResponse);
+                dto.getMap().put(CSV_COMPUTE_SERVICE_TEMPLATES_PATH, this.csvComputeServiceTemplatesPath);
 
                 //sb.append("\n").append(vmResponse);
                 // create block storage service path
                 String bsResponse = repository.createBSPath();
+                logger.info("Block-Service path creation response [{}]", bsResponse);
                 dto.getMap().put(CSV_BLOCK_SERVICE_PATH, this.csvBlockServicePath);
                 //sb.append("\n").append(bsResponse);
             } else {

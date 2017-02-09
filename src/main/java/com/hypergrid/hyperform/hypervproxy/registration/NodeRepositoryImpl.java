@@ -67,7 +67,7 @@ public class NodeRepositoryImpl implements NodeRepository {
     public String getClusterName() {
         try {
             String cmdlet = "Get-Cluster | Select-Object Name";
-            String response = cmdletsService.executeCommand("", cmdlet, "", "", "", null);
+            String response = cmdletsService.executeCommand(cmdlet);
             logger.info("cmdlet [{}] response [{}]", cmdlet, response);
             Set<String> names = extractNames(response);
             if (!CollectionUtils.isEmpty(names)) {
@@ -85,7 +85,7 @@ public class NodeRepositoryImpl implements NodeRepository {
     public String getNodeName() {
         try {
             String cmdlet = "Get-VMHost | Select-Object Name";
-            String response = cmdletsService.executeCommand("", cmdlet, "", "", "", null);
+            String response = cmdletsService.executeCommand(cmdlet);
             logger.info("cmdlet [{}] response [{}]", cmdlet, response);
             Set<String> names = extractNames(response);
             if (!CollectionUtils.isEmpty(names)) {
@@ -151,6 +151,12 @@ public class NodeRepositoryImpl implements NodeRepository {
         Set<String> names = new HashSet<>();
 
         try {
+
+            if (org.apache.commons.lang3.StringUtils.containsIgnoreCase(rawText, "Exception")) {
+                logger.info("Ignoring response [{}] because of 'Exception'", rawText);
+                return names;
+            }
+
             Pattern regex = Pattern.compile("^[a-zA-Z0-9_ -\\\\]*",
                     Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 
