@@ -197,7 +197,7 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
             String response = registrationSender.sendAndReceiveProxy(repository.getHyperCloudUrl(), dto);
 
             if (StringUtils.equals(response, "Error")) {
-                return false;
+                return true;
             }
             logger.info("Registration response [{}]", response);
             return true;
