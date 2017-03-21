@@ -203,7 +203,8 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
             return true;
         } catch (Exception e) {
             logger.warn(e.getLocalizedMessage(), e);
-            return false;
+            logger.warn("Registration failed....");
+            return true;
         }
 
     }

@@ -49,15 +49,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         if (StringUtils.isEmpty(password)
                 || org.apache.commons.lang3.StringUtils.equalsIgnoreCase("yes", generatePassword)
                 || org.apache.commons.lang3.StringUtils.equalsIgnoreCase("true", generatePassword)) {
-            //logger.info("Generating new password on start...");
+
+            logger.info("Generating new password on start...");
             this.password = RandomStringUtils.randomAlphanumeric(64);
             logger.info("Generated new password [{}]", this.password);
-            this.password = DigestUtils.sha256Hex(this.password);
 
             logger.info("Persisting password hash [{}]", this.password);
             ConfigFileUtil.writeConfigFile(this.password);
         }
 
+        this.password = DigestUtils.sha256Hex(this.password);
 
         logger.info("API Credentials: username [{}] password [{}]", this.username, this.password);
         logger.info("*****************************************************************");
