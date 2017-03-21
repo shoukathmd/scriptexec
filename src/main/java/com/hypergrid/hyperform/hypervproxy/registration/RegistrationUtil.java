@@ -111,11 +111,11 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
             response = register();
             try {
                 if (BooleanUtils.isFalse(response)) {
-                    Thread.sleep(600 * 1000);  // sleep for 10 minutes
+                    //Thread.sleep(600 * 1000);  // sleep for 10 minutes
                 } else {
                     logger.info("Registration complete!");
                 }
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 logger.warn(e.getLocalizedMessage());
             }
         }
