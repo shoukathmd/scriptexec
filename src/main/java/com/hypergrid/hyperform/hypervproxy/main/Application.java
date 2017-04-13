@@ -13,7 +13,6 @@ import org.springframework.context.annotation.PropertySource;
  * @author Intesar Mohammed
  */
 @SpringBootApplication(scanBasePackages = {"com.hypergrid.hyperform.hypervproxy"})
-@PropertySource(value = {"${config.location}"})
 public class Application {
     final Logger logger = LoggerFactory.getLogger(getClass());
 
