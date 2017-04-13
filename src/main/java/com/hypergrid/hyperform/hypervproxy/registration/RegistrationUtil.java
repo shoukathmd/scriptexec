@@ -235,7 +235,7 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
 
             // csv paths
             String csv = repository.getCSVPath();
-            if (org.apache.commons.lang3.StringUtils.equalsIgnoreCase(csv, "true")) {
+            //if (org.apache.commons.lang3.StringUtils.equalsIgnoreCase(csv, "true")) {
                 //dto.getMap().put(CSV_PATH, this.csvPath);
                 // create compute service path
                 String vmResponse = repository.createVMPath();
@@ -255,10 +255,10 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
                 logger.info("Block-Service path creation response [{}]", bsResponse);
                 dto.getMap().put(CSV_BLOCK_SERVICE_PATH, this.csvBlockServicePath);
                 //sb.append("\n").append(bsResponse);
-            } else {
-                sb.append("\n")
-                        .append("Cluster Shared Volume path 'csv.path' not found.");
-            }
+            //} else {
+            //    sb.append("\n")
+            //            .append("Cluster Shared Volume path 'csv.path' not found.");
+            //}
 
             // hypervue
             dto.getMap().put(HYPERVUE_ENDPOINT, hyperVueEndpoint);

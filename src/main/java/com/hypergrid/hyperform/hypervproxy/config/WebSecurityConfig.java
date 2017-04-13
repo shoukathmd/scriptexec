@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             logger.info("Generated new password [{}]", this.password);
 
             logger.info("Persisting password hash [{}]", this.password);
-            ConfigFileUtil.getInstance(reservedConfigLocation).writeConfigFile(this.password);
+            //ConfigFileUtil.getInstance(reservedConfigLocation).writeConfigFile(this.password);
         }
 
         this.password = DigestUtils.sha256Hex(this.password);
