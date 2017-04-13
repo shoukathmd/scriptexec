@@ -63,7 +63,7 @@ public class NodeRepositoryImpl implements NodeRepository {
             String ip = Hostname.getHostname();
             //String ip = InetAddress.getLocalHost().getHostName();
             return ip;
-        } catch (UnknownHostException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
