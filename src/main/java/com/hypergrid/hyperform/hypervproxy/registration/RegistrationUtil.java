@@ -93,9 +93,9 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
                             @Value("${proxy.leader.ip}") String proxyLeaderIp,
                             @Value("${config.location}") String configLocation,
 
-                            @Value("${hypervue.endpoint}") String hyperVueEndpoint,
-                            @Value("${hypervue.username}") String hyperVueUsername,
-                            @Value("${hypervue.password}") String hyperVuePassword,
+                            @Value("${hcim.endpoint}") String hyperVueEndpoint,
+                            @Value("${hcim.username}") String hyperVueUsername,
+                            @Value("${hcim.password}") String hyperVuePassword,
 
                             CmdletsService cmdletsService,
                             @Qualifier("NodeRepositoryImpl") NodeRepository nodeRepository,
