@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * App starting point.
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Intesar Mohammed
  */
 @SpringBootApplication(scanBasePackages = {"com.hypergrid.hyperform.hypervproxy"})
+@PropertySource(value = {"${config.location}"})
 public class Application {
     final Logger logger = LoggerFactory.getLogger(getClass());
 
