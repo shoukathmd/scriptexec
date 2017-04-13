@@ -33,14 +33,14 @@ public class NodeRepositoryImpl implements NodeRepository {
     @Autowired
     protected CmdletsService cmdletsService;
 
-    @Value("${csv.path}")
-    protected String CSV;
+    //@Value("${csv.path}")
+    //protected String CSV;
 
     @Value("${csv.compute-service.path1}")
     protected String CSV_VM_PATH1;
 
-    @Value("${csv.compute-service.path2}")
-    protected String CSV_VM_PATH2;
+    //@Value("${csv.compute-service.path2}")
+    //protected String CSV_VM_PATH2;
 
     @Value("${csv.block-service.path}")
     protected String CSV_BS_PATH;
@@ -108,7 +108,7 @@ public class NodeRepositoryImpl implements NodeRepository {
     @Override
     public String getCSVPath() {
         try {
-            String cmdlet = "Test-Path " + CSV;
+            String cmdlet = "Test-Path " + CSV_VM_PATH1;
             String response = cmdletsService.executeCommand(cmdlet);
             logger.info("cmdlet [{}] response [{}]", cmdlet, response);
             return response;
@@ -122,8 +122,8 @@ public class NodeRepositoryImpl implements NodeRepository {
     public String createVMPath() {
         StringBuilder sb = new StringBuilder();
         sb.append(createPath(CSV_VM_PATH1));
-        sb.append("\n");
-        sb.append(createPath(CSV_VM_PATH2));
+        //sb.append("\n");
+        //sb.append(createPath(CSV_VM_PATH2));
         return sb.toString();
     }
 

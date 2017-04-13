@@ -40,11 +40,11 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
 
 
     protected String csvPath1;
-    protected String csvPath2;
+    //protected String csvPath2;
     protected String csvComputeServiceTemplatesPath;
 
     protected String csvComputeServicePath1;
-    protected String csvComputeServicePath2;
+    //protected String csvComputeServicePath2;
 
 
     protected String csvBlockServicePath;
@@ -85,9 +85,9 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
                             @Value("${registration.max.retry}") Integer maxRetries,
                             @Value("${mock.service}") Boolean mockService,
                             @Value("${csv.path1}") String csvPath1,
-                            @Value("${csv.path2}") String csvPath2,
+                            //@Value("${csv.path2}") String csvPath2,
                             @Value("${csv.compute-service.path1}") String csvComputeServicePath1,
-                            @Value("${csv.compute-service.path2}") String csvComputeServicePath2,
+                            //@Value("${csv.compute-service.path2}") String csvComputeServicePath2,
                             @Value("${csv.templates.path}") String csvComputeServiceTemplatesPath,
                             @Value("${csv.block-service.path}") String csvBlockServicePath,
                             @Value("${proxy.leader.ip}") String proxyLeaderIp,
@@ -114,11 +114,11 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
         this.registrationSender = registrationSender;
 
         this.csvPath1 = csvPath1;
-        this.csvPath2 = csvPath2;
+        //this.csvPath2 = csvPath2;
         this.csvComputeServiceTemplatesPath = csvComputeServiceTemplatesPath;
 
         this.csvComputeServicePath1 = csvComputeServicePath1;
-        this.csvComputeServicePath2 = csvComputeServicePath2;
+        //this.csvComputeServicePath2 = csvComputeServicePath2;
 
         this.csvBlockServicePath = csvBlockServicePath;
 
@@ -240,7 +240,7 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
 
                 logger.info("Compute-Service path creation response [{}]", vmResponse);
                 dto.getMap().put(CSV_COMPUTE_SERVICE_PATH1, this.csvComputeServicePath1);
-                dto.getMap().put(CSV_COMPUTE_SERVICE_PATH2, this.csvComputeServicePath2);
+                //dto.getMap().put(CSV_COMPUTE_SERVICE_PATH2, this.csvComputeServicePath2);
 
                 // create templates path
                 String templatesResponse = repository.createTemplatesPath();
