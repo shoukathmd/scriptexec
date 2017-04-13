@@ -9,10 +9,26 @@ import java.util.Properties;
  */
 public class ConfigFileUtil {
 
-    public static final String CONFIG = "C://opt//dchq//application.properties";
+    //public static final String CONFIG = "C://opt//dchq//application.properties";
+    //public static final String CONFIG = "C://ClusterStorage//HyperCloud_Reserved//proxy//application.properties";
+
+    private String CONFIG;
+    private static ConfigFileUtil instance;
+
+    private ConfigFileUtil(String configLocation) {
+        CONFIG = configLocation;
+    }
+
+    public static ConfigFileUtil getInstance(String configLocation) {
+        if (instance == null) {
+            instance = new ConfigFileUtil(configLocation);
+        }
+        return instance;
+    }
+
     public static final String PROP_PASS = "hypervproxy.password";
 
-    public static void writeConfigFile(String password) {
+    public void writeConfigFile(String password) {
 
         Properties prop = null;
         OutputStream output = null;
@@ -46,7 +62,7 @@ public class ConfigFileUtil {
         }
     }
 
-    public static Properties readConfigFile() {
+    public Properties readConfigFile() {
 
         Properties prop = new Properties();
         InputStream input = null;

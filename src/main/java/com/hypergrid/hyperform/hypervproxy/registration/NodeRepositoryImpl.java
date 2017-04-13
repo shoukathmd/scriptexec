@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.kstruct.gethostname4j.Hostname;
+
 /**
  * @author Intesar Mohammed
  */
@@ -34,8 +36,11 @@ public class NodeRepositoryImpl implements NodeRepository {
     @Value("${csv.path}")
     protected String CSV;
 
-    @Value("${csv.compute-service.path}")
-    protected String CSV_VM_PATH;
+    @Value("${csv.compute-service.path1}")
+    protected String CSV_VM_PATH1;
+
+    @Value("${csv.compute-service.path2}")
+    protected String CSV_VM_PATH2;
 
     @Value("${csv.block-service.path}")
     protected String CSV_BS_PATH;
@@ -55,7 +60,8 @@ public class NodeRepositoryImpl implements NodeRepository {
     @Override
     public String getHostIp() {
         try {
-            String ip = InetAddress.getLocalHost().getHostName();
+            String ip = Hostname.getHostname();
+            //String ip = InetAddress.getLocalHost().getHostName();
             return ip;
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -114,7 +120,11 @@ public class NodeRepositoryImpl implements NodeRepository {
 
     @Override
     public String createVMPath() {
-        return createPath(CSV_VM_PATH);
+        StringBuilder sb = new StringBuilder();
+        sb.append(createPath(CSV_VM_PATH1));
+        sb.append("\n");
+        sb.append(createPath(CSV_VM_PATH2));
+        return sb.toString();
     }
 
     @Override
