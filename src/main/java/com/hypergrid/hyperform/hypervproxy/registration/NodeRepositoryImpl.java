@@ -144,7 +144,7 @@ public class NodeRepositoryImpl implements NodeRepository {
             String testPath = "Test-Path " + path;
             String isPathPresent = cmdletsService.executeCommand(testPath);
 
-            if (org.apache.commons.lang3.StringUtils.equalsIgnoreCase("true", isPathPresent)) {
+            if (org.apache.commons.lang3.StringUtils.equalsIgnoreCase("true", StringUtils.trimAllWhitespace(isPathPresent))) {
                 logger.info("Path [{}] exists", path);
                 return "true";
             }
