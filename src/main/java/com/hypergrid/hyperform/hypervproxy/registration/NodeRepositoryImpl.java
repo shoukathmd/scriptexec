@@ -27,7 +27,7 @@ import com.kstruct.gethostname4j.Hostname;
 
 @Component()
 @Qualifier("NodeRepositoryImpl")
-@PropertySource(value = {"${config.location}"})
+//@PropertySource(value = {"${config.location}"})
 public class NodeRepositoryImpl implements NodeRepository {
 
     final Logger logger = LoggerFactory.getLogger(getClass());

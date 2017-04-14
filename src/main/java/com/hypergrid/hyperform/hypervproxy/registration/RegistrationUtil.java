@@ -23,7 +23,7 @@ import java.util.Properties;
  */
 
 @Component
-@PropertySource(value = {"${config.location}"})
+//@PropertySource(value = {"${config.location}"})
 public class RegistrationUtil implements ApplicationListener<ContextRefreshedEvent> {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
