@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
@@ -82,6 +81,9 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
     private final String HYPERVUE_PASSWORD = "hv.password";
 
 
+    private Boolean autoRegister;
+
+
     @Autowired
     public RegistrationUtil(@Value("${server.port}") String port,
                             @Value("${registration.max.retry}") Integer maxRetries,
@@ -94,7 +96,7 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
                             @Value("${csv.block-service.path}") String csvBlockServicePath,
                             @Value("${proxy.leader.ip}") String proxyLeaderIp,
                             @Value("${config.location}") String configLocation,
-
+                            @Value("${auto.register}") Boolean autoRegister,
                             @Value("${hcim.endpoint}") String hyperVueEndpoint,
                             @Value("${hcim.username}") String hyperVueUsername,
                             @Value("${hcim.password}") String hyperVuePassword,
@@ -128,6 +130,7 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
         this.hyperVueUsername = hyperVueUsername;
         this.hyperVuePassword = hyperVuePassword;
 
+        this.autoRegister = autoRegister;
         repository = nodeRepository;
         if (BooleanUtils.isTrue(mockService)) {
             repository = mockRepository;
@@ -136,7 +139,11 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        registerRetreable();
+        if (BooleanUtils.isFalse(autoRegister)) {
+            logger.info("Skipping Registration...");
+        } else {
+            registerRetreable();
+        }
     }
 
     /**
@@ -236,25 +243,25 @@ public class RegistrationUtil implements ApplicationListener<ContextRefreshedEve
             // csv paths
             String csv = repository.getCSVPath();
             //if (org.apache.commons.lang3.StringUtils.equalsIgnoreCase(csv, "true")) {
-                //dto.getMap().put(CSV_PATH, this.csvPath);
-                // create compute service path
-                String vmResponse = repository.createVMPath();
+            //dto.getMap().put(CSV_PATH, this.csvPath);
+            // create compute service path
+            String vmResponse = repository.createVMPath();
 
-                logger.info("Compute-Service path creation response [{}]", vmResponse);
-                dto.getMap().put(CSV_COMPUTE_SERVICE_PATH1, this.csvComputeServicePath1);
-                //dto.getMap().put(CSV_COMPUTE_SERVICE_PATH2, this.csvComputeServicePath2);
+            logger.info("Compute-Service path creation response [{}]", vmResponse);
+            dto.getMap().put(CSV_COMPUTE_SERVICE_PATH1, this.csvComputeServicePath1);
+            //dto.getMap().put(CSV_COMPUTE_SERVICE_PATH2, this.csvComputeServicePath2);
 
-                // create templates path
-                String templatesResponse = repository.createTemplatesPath();
-                logger.info("Compute-Service Templates path creation response [{}]", templatesResponse);
-                dto.getMap().put(CSV_COMPUTE_SERVICE_TEMPLATES_PATH, this.csvComputeServiceTemplatesPath);
+            // create templates path
+            String templatesResponse = repository.createTemplatesPath();
+            logger.info("Compute-Service Templates path creation response [{}]", templatesResponse);
+            dto.getMap().put(CSV_COMPUTE_SERVICE_TEMPLATES_PATH, this.csvComputeServiceTemplatesPath);
 
-                //sb.append("\n").append(vmResponse);
-                // create block storage service path
-                String bsResponse = repository.createBSPath();
-                logger.info("Block-Service path creation response [{}]", bsResponse);
-                dto.getMap().put(CSV_BLOCK_SERVICE_PATH, this.csvBlockServicePath);
-                //sb.append("\n").append(bsResponse);
+            //sb.append("\n").append(vmResponse);
+            // create block storage service path
+            String bsResponse = repository.createBSPath();
+            logger.info("Block-Service path creation response [{}]", bsResponse);
+            dto.getMap().put(CSV_BLOCK_SERVICE_PATH, this.csvBlockServicePath);
+            //sb.append("\n").append(bsResponse);
             //} else {
             //    sb.append("\n")
             //            .append("Cluster Shared Volume path 'csv.path' not found.");
