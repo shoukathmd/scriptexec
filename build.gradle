@@ -58,3 +58,21 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.4'
 }
+
+
+allprojects {
+    updateVersionInApplicationProperties()
+}
+
+def updateVersionInApplicationProperties() {
+    def configFile = new File('src/main/resources/application-build.properties')
+    println "Updating version to '" + getDate() + "' in ${configFile}"
+    String configContent = configFile.getText('UTF-8')
+    configContent = configContent.replaceAll(/info\.build\.version=.*/, "info.build.version=" + getDate())
+    configFile.write(configContent, 'UTF-8')
+
+}
+
+def getDate() {
+    new Date().format('yyyy.MM.dd')
+}

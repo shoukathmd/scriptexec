@@ -15,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
+
 /**
  * @author Intesar Mohammed
  */
@@ -44,6 +46,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().hasAnyRole("USER")
                 .and().httpBasic();
     }
+
+    protected @Value("${info.build.version}")
+    String version;
+
+    @PostConstruct
+    public void printVersion() {
+        logger.info("############### Proxy Version: [{}] #################", version);
+    }
+
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
