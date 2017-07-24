@@ -74,5 +74,5 @@ def updateVersionInApplicationProperties() {
 }
 
 def getDate() {
-    new Date().format('yyyy.MM.dd')
+    new Date().format('yy.MM.dd')
 }
