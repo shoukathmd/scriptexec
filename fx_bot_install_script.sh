@@ -1,8 +1,23 @@
 #!/bin/bash -x
 # Begin
-sudo curl -sSL https://get.docker.com/ | sh
- 
-sudo docker  login -u fxlabs -p FunctionLabs1234!
 
-docker run -d -e FX_IAM=Mwc/0zF7dfX+PUq6Jz26AkdbFUE13eL5 -e FX_KEY=jrtPsZ5x96rhW6H/5zsFPFH8XzDmIq5/ldLAjyOZbbE= fxlabs/bot:latest
-#docker run -d -e FX_HOST=13.56.210.25 -e FX_PORT=5672 FX_SSL=false FX_IAM=Mwc/0zF7dfX+PUq6Jz26AkdbFUE13eL5 -e FX_KEY=vMIUc6isjyF5qIY8nZjuQVOeK7wY3nG55lWkJUBeHXc= fxlabs/bot:latest
+FX_HOST=$1
+FX_PORT=$2
+FX_SSL=$3
+FX_IAM=$4
+FX_KEY=$5
+FX_TAG=$6
+
+if [[ which docker && docker --version ]]; then
+  echo "docker installed"
+  # command
+else
+  echo "Installing docker"
+   #install docker
+  sudo curl -sSL https://get.docker.com/ | sh
+fi
+
+echo "Starting FXLabs/Bot" 
+echo "host=${FX_HOST}:${FX_PORT}"
+ 
+sudo docker run -d -e FX_HOST="${FX_HOST}" -e FX_PORT="${FX_PORT}" -e FX_SSL="${FX_SSL}" -e FX_IAM="${FX_IAM}" -e FX_KEY="${FX_KEY}" fxlabs/bot:${FX_TAG}
