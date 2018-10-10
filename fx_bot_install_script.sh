@@ -8,6 +8,8 @@ FX_IAM=$4
 FX_KEY=$5
 FX_TAG=$6
 
+#install docker
+sudo curl -sSL https://get.docker.com/ | sh
 
 echo "Starting FXLabs/Bot" 
 echo "host=${FX_HOST}:${FX_PORT}"
