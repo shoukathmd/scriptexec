@@ -8,14 +8,26 @@ FX_IAM=$4
 FX_KEY=$5
 FX_TAG=$6
 
-if [[ which docker && docker --version ]]; then
-  echo "docker installed"
-  # command
+
+which docker
+
+if [ $? -eq 0 ]
+then
+    docker --version | grep "Docker version"
+    if [ $? -eq 0 ]
+    then
+        echo "docker existing"
+    else
+        echo "Installing docker"
+        #install docker
+        sudo curl -sSL https://get.docker.com/ | sh
+    fi
 else
-  echo "Installing docker"
+   echo "Installing docker"
    #install docker
   sudo curl -sSL https://get.docker.com/ | sh
 fi
+
 
 echo "Starting FXLabs/Bot" 
 echo "host=${FX_HOST}:${FX_PORT}"
